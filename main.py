@@ -1,6 +1,8 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from api.v1.routes import router as api_router
+from core.database import int_db
+int_db()
 
 app = FastAPI(
     title="AI Study Buddy",
