@@ -1,9 +1,8 @@
-from fastapi import APIRouter, HTTPException, status
+from fastapi import APIRouter, HTTPException, status,Query
 from pydantic import BaseModel
-from datetime import timedelta
 from core.utils import hash_password, verify_password, create_access_token
 from core.database import get_user_by_username, add_user
-from fastapi.responses import RedirectResponse
+from services.stt_service import handle_speak
 
 router = APIRouter()
 
@@ -52,3 +51,15 @@ def login_user(user: LoginRequest):
 @router.get("/home")
 def home_page():
     return {"message": "Welcome to AI Study Buddy APP"}
+
+language_options ={
+    "en":"English",
+    "te":"Telugu",
+    "hi":"Hindi",
+    "ta":"Tamil",
+    "kn":"Kannada",
+    "ml":"Malayalam"
+}
+@router.get("/speak")
+def speak(language:str =  Query("en",title="select language",description ="Choose a spoken language",enum=list(language_options.keys())),language2:str=Query("en",title="select language",description ="Choose a spoken language",enum=list(language_options.keys()))):
+    return handle_speak(language,language2)
